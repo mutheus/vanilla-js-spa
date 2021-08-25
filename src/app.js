@@ -1,32 +1,66 @@
-function Home() {
+function Home(data) {
+  const items = data.map((item) => {
+    return `
+      <li>
+        <a href="${item.title}" data-title="${item.title}">
+          <h4>${item.title}</h4>
+          <p>${item.description}</p>
+        </a>
+      </li>
+    `;
+  }).join('');
+  
   return `
     <div>
       <h1>Clubbeans</h1>
       
-      <h6><a>go to item</a></h6>
+      <ul>
+        ${items}
+      </ul>
     </div>
   `;
 }
 
-function Item() {
-  return '<h6>Item</h6>'
+function Item(data) {
+  const item = data.ingredients.map((item) => {
+    return `<li>${item}</li>`;
+  }).join('');
+  
+  return `
+    <div>
+      <h6>${data.title}</h6>
+      
+      <ul>
+        ${item}
+      </ul>
+    </div>
+  `;
 }
 
-function App() {
+async function App() {
   const url = location.pathname;
+  const result = await fetch('https://api.sampleapis.com/coffee/hot/?_limit=5');
+  const data = await result.json();
   
   const routes = {
-    '/': Home(),
-    '/item': Item()
-  }
+    '/': Home(data),
+  };
+  
+  data.forEach((item) => {
+    const url = '/' + item.title.toLowerCase().replace(' ', '-');
+    
+    routes[url] = Item(item)
+  });
   
   const appWrapper = document.querySelector('[data-js="app"]');
-  appWrapper.innerHTML = routes[url];
-  const anchor = document.querySelector('a');
-  anchor.addEventListener('click', () => {
-    history.pushState(null, null, location.origin + '/item')
+  appWrapper.innerHTML = routes[url] || '<div><h4>Error 404</h4></div>'
+  const anchorElem = document.querySelectorAll('[data-title]');
+  anchorElem.forEach((a) => a.addEventListener('click', (e) => {
+    e.preventDefault();
+    const url = '/' + a.dataset.title.toLowerCase().replace(' ', '-');
+    history.pushState(null, null, location.origin + url);
     App();
-  });
+  }))
   
   return appWrapper;
 }

@@ -17,5 +17,6 @@
   "scripts": {
     "build": "webpack",
     "dev-server": "webpack-dev-server"
-  }
+  },
+  "dependencies": {}
 }
