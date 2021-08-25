@@ -1,8 +1,10 @@
 function Home(data) {
   const items = data.map((item) => {
+    const url = '/' + item.title.toLowerCase().replace(' ', '-');
+
     return `
       <li>
-        <a href="${item.title}" data-title="${item.title}">
+        <a href="${url}" data-title="${url}">
           <h4>${item.title}</h4>
           <p>${item.description}</p>
         </a>
@@ -57,7 +59,6 @@ async function App() {
   const anchorElem = document.querySelectorAll('[data-title]');
   anchorElem.forEach((a) => a.addEventListener('click', (e) => {
     e.preventDefault();
-    const url = '/' + a.dataset.title.toLowerCase().replace(' ', '-');
     history.pushState(null, null, location.origin + url);
     App();
   }))
