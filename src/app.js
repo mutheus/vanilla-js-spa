@@ -1,6 +1,8 @@
+import latinize from 'latinize';
+
 function Home(data) {
   const items = data.map((item) => {
-    const url = '/' + item.title.toLowerCase().replace(' ', '-');
+    const url = latinize('/' + item.title.toLowerCase().replace(' ', '-'));
 
     return `
       <li>
@@ -30,7 +32,10 @@ function Item(data) {
   
   return `
     <div>
-      <h6>${data.title}</h6>
+      <a href="" data-js="back-btn">< Back</a>
+      <h1>${data.title}</h1>
+      
+      <h4>ingredients:</h4>
       
       <ul>
         ${item}
@@ -41,7 +46,7 @@ function Item(data) {
 
 async function App() {
   const url = location.pathname;
-  const result = await fetch('https://api.sampleapis.com/coffee/hot/?_limit=5');
+  const result = await fetch('https://api.sampleapis.com/coffee/hot/?_limit=10');
   const data = await result.json();
   
   const routes = {
@@ -49,17 +54,23 @@ async function App() {
   };
   
   data.forEach((item) => {
-    const url = '/' + item.title.toLowerCase().replace(' ', '-');
+    const url = latinize('/' + item.title.toLowerCase().replace(' ', '-'));
     
     routes[url] = Item(item)
   });
   
   const appWrapper = document.querySelector('[data-js="app"]');
-  appWrapper.innerHTML = routes[url] || '<div><h4>Error 404</h4></div>'
+  appWrapper.innerHTML = routes[url] || '<div><h3>Error 404</h3></div>'
   const anchorElem = document.querySelectorAll('[data-title]');
+  const backBtn = document.querySelectorAll('[data-js="back-btn"]');
   anchorElem.forEach((a) => a.addEventListener('click', (e) => {
     e.preventDefault();
-    history.pushState(null, null, location.origin + url);
+    history.pushState(null, null, location.origin + a.dataset.title);
+    App();
+  }))
+  backBtn.forEach((a) => a.addEventListener('click', (e) => {
+    e.preventDefault();
+    history.back();
     App();
   }))
   

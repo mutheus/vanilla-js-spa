@@ -18,5 +18,7 @@
     "build": "webpack",
     "dev-server": "webpack-dev-server"
   },
-  "dependencies": {}
+  "dependencies": {
+    "latinize": "^0.5.0"
+  }
 }
