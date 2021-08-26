@@ -1,2 +1,2 @@
 # clubbeans
-A coffee beans club app.
+A coffee beans club SPA built with Vanilla JS.
