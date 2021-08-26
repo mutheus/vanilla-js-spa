@@ -1,5 +1,9 @@
 import latinize from 'latinize';
 
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
 function Home(data) {
   const items = data.map((item) => {
     const url = latinize('/' + item.title.toLowerCase().replace(' ', '-'));
@@ -32,7 +36,7 @@ function Item(data) {
   
   return `
     <div>
-      <a href="" data-js="back-btn">< Back</a>
+      <a href="/" data-js="back-btn">< Back</a>
       <h1>${data.title}</h1>
       
       <h4>ingredients:</h4>
@@ -70,7 +74,7 @@ async function App() {
   }))
   backBtn.forEach((a) => a.addEventListener('click', (e) => {
     e.preventDefault();
-    history.back();
+    history.pushState(null, null, location.origin + '/');
     App();
   }))
   
