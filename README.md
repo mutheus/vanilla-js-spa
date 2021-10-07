@@ -1,2 +1,1 @@
-# clubbeans
-A coffee beans club SPA built with Vanilla JS.
+# A SPA built with Vanilla JS.
